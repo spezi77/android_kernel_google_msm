@@ -1446,6 +1446,13 @@ static struct msm_rpmrs_level msm_rpmrs_levels[] = {
 		1, 784, 180000, 100,
 	},
 
+ 	{
+		MSM_PM_SLEEP_MODE_RETENTION,
+		MSM_RPMRS_LIMITS(ON, ACTIVE, MAX, ACTIVE),
+		true,
+		415, 715, 340827, 475,
+	},
+
 	{
 		MSM_PM_SLEEP_MODE_RETENTION,
 		MSM_RPMRS_LIMITS(ON, ACTIVE, MAX, ACTIVE),
@@ -2147,6 +2154,7 @@ static void __init apq8064_common_init(void)
 	apq8064_init_dsps();
 	platform_device_register(&msm_8960_riva);
 	BUG_ON(msm_pm_boot_init(&msm_pm_boot_pdata));
+	msm_pm_set_tz_retention_flag(1);
 }
 
 static void __init apq8064_allocate_memory_regions(void)
