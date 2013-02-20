@@ -65,6 +65,51 @@ module_param(nr_run_hysteresis, uint, 0644);
 
 static unsigned int nr_run_last;
 
+static unsigned int NwNs_Threshold[] = { 19, 30,  27,  11,  19,  11, 0,  11};
+static unsigned int TwTs_Threshold[] = {140,  0, 180, 190, 140, 190, 0, 190};
+
+static int mp_decision(void)
+{
+	static bool first_call = true;
+	int new_state = 0;
+	int nr_cpu_online;
+	int index;
+	unsigned int rq_depth;
+	static cputime64_t total_time = 0;
+	static cputime64_t last_time;
+	cputime64_t current_time;
+	cputime64_t this_time = 0;
+
+	current_time = ktime_to_ms(ktime_get());
+	if (first_call) {
+		first_call = false;
+	} else {
+		this_time = current_time - last_time;
+	}
+	total_time += this_time;
+
+	rq_depth = rq_info.rq_avg;
+	//pr_info(" rq_deptch = %u", rq_depth);
+	nr_cpu_online = num_online_cpus();
+
+	if (nr_cpu_online) {
+		index = (nr_cpu_online - 1) * 2;
+		if ((nr_cpu_online < 4) && (rq_depth >= NwNs_Threshold[index])) {
+			if (total_time >= TwTs_Threshold[index]) {
+				new_state = 1;
+			}
+		} else {
+			total_time = 0;
+		}
+	} else {
+		total_time = 0;
+	}
+
+	last_time = ktime_to_ms(ktime_get());
+
+	return new_state;
+}
+
 static unsigned int calculate_thread_stats(void)
 {
 	unsigned int avg_nr_run = avg_nr_running();
