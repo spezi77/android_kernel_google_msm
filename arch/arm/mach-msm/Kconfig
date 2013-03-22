@@ -173,6 +173,7 @@ config ARCH_MSM8960
 	select USE_USER_ACCESSIBLE_TIMERS
 	select ARM_USE_USER_ACCESSIBLE_TIMERS
 	select MSM_USE_USER_ACCESSIBLE_TIMERS
+	select HAS_MACH_MEMUTILS
 
 config ARCH_MSM8930
 	bool "MSM8930"
@@ -2698,5 +2699,11 @@ config FORCE_FAST_CHARGE
 	help
 	  A simple sysfs interface to force adapters that
 	  are detected as USB to charge as AC.
+
+config HAS_MACH_MEMUTILS
+	default n
+	bool "Motorola MSM memcpy enhancements"
+	help
+	Faster memcpy performance for Krait
 
 endif
