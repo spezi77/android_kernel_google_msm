@@ -31,6 +31,8 @@
 #include <linux/version.h>
 #include <linux/atomic.h>
 #include <linux/gpio.h>
+#include <linux/pm.h>
+#include <linux/pm_runtime.h>
 
 #include <linux/input/lge_touch_core.h>
 
@@ -998,7 +1000,11 @@ static void touch_fw_upgrade_func(struct work_struct *work_fw_upgrade)
 		touch_ic_init(ts);
 
 		if (saved_state == POWER_WAKE || saved_state == POWER_SLEEP)
+#ifdef CONFIG_TOUCHSCREEN_SWEEP2WAKE
+                        touch_power_cntl(ts, POWER_ON);
+#else
 			touch_power_cntl(ts, saved_state);
+#endif
 	}
 
 	if (likely(touch_debug_mask & (DEBUG_FW_UPGRADE |DEBUG_BASE_INFO)))
@@ -1775,6 +1781,12 @@ static int touch_probe(struct i2c_client *client,
 		goto err_alloc_data_failed;
 	}
 
+	/* Enable runtime PM ops, start in ACTIVE mode */
+	ret = pm_runtime_set_active(&client->dev);
+	if (ret < 0)
+		dev_dbg(&client->dev, "unable to set runtime pm state\n");
+	pm_runtime_enable(&client->dev);
+
 	ts->pdata = client->dev.platform_data;
 	ret = check_platform_data(ts->pdata);
 	if (ret < 0) {
@@ -1943,6 +1955,8 @@ static int touch_probe(struct i2c_client *client,
 		ts->accuracy_filter.touch_max_count = one_sec / 2;
 	}
 
+        device_init_wakeup(&client->dev, true);
+
 #if defined(CONFIG_HAS_EARLYSUSPEND)
 	ts->early_suspend.level = EARLY_SUSPEND_LEVEL_BLANK_SCREEN + 1;
 	ts->early_suspend.suspend = touch_early_suspend;
@@ -1999,6 +2013,8 @@ err_input_dev_alloc_failed:
 err_power_failed:
 err_assign_platform_data:
 	kfree(ts);
+	pm_runtime_set_suspended(&client->dev);
+	pm_runtime_disable(&client->dev);
 err_alloc_data_failed:
 err_check_functionality_failed:
 	return ret;
@@ -2023,6 +2039,11 @@ static int touch_remove(struct i2c_client *client)
 	sysdev_class_unregister(&lge_touch_sys_class);
 
 	unregister_early_suspend(&ts->early_suspend);
+
+	pm_runtime_set_suspended(&client->dev);
+	pm_runtime_disable(&client->dev);
+
+	device_init_wakeup(&client->dev, 0);
 
 	if (ts->pdata->role->operation_mode == INTERRUPT_MODE) {
 		gpio_free(ts->pdata->int_pin);
@@ -2080,6 +2101,7 @@ static void touch_early_suspend(struct early_suspend *h)
 #ifdef CONFIG_TOUCHSCREEN_SWEEP2WAKE
         else if (s2w_switch > 0)
                 enable_irq_wake(ts->client->irq);
+        }
 #endif
 }
 
