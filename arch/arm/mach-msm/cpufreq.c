@@ -111,6 +111,10 @@ out:
 	mutex_unlock(&l2bw_lock);
 }
 
+#ifdef CONFIG_TURBO_BOOST
+extern int msm_turbo(int);
+#endif
+
 static int set_cpu_freq(struct cpufreq_policy *policy, unsigned int new_freq,
 			unsigned int index)
 {
@@ -139,6 +143,10 @@ static int set_cpu_freq(struct cpufreq_policy *policy, unsigned int new_freq,
 	if (cpufreq_frequency_table_target(policy, table, new_freq,
 		CPUFREQ_RELATION_H, &index))
 		return -EINVAL;
+
+#ifdef CONFIG_TURBO_BOOST
+	new_freq = msm_turbo(new_freq);
+#endif
 
 	freqs.old = policy->cur;
 	freqs.new = new_freq;
