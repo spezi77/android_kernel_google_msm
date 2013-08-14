@@ -27,6 +27,7 @@
 #include <linux/input.h>
 #include <linux/workqueue.h>
 #include <linux/slab.h>
+#include <linux/msm_thermal.h>
 
 #include <trace/events/power.h>
 
@@ -1086,6 +1087,9 @@ static void dbs_input_event(struct input_handle *handle, unsigned int type,
 		/* nothing to do */
 		return;
 	}
+	
+	if (throttled_bin > 0)
+		return;
 
 	for_each_online_cpu(i)
 		queue_work_on(i, dbs_wq, &per_cpu(dbs_refresh_work, i).work);

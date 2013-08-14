@@ -14,6 +14,8 @@
 #ifndef __MSM_THERMAL_H
 #define __MSM_THERMAL_H
 
+extern int throttled_bin;
+
 struct msm_thermal_data {
 	uint32_t sensor_id;
 	uint32_t poll_ms;
