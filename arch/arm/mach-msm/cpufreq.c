@@ -126,6 +126,10 @@ static int set_cpu_freq(struct cpufreq_policy *policy, unsigned int new_freq,
 	struct sched_param param = { .sched_priority = MAX_RT_PRIO-1 };
 	struct cpufreq_frequency_table *table;
 
+#ifdef CONFIG_TURBO_BOOST
+	new_freq = msm_turbo(new_freq);
+#endif
+
 	if (limit->limits_init) {
 		if (new_freq > limit->allowed_max) {
 			new_freq = limit->allowed_max;
@@ -143,10 +147,6 @@ static int set_cpu_freq(struct cpufreq_policy *policy, unsigned int new_freq,
 	if (cpufreq_frequency_table_target(policy, table, new_freq,
 		CPUFREQ_RELATION_H, &index))
 		return -EINVAL;
-
-#ifdef CONFIG_TURBO_BOOST
-	new_freq = msm_turbo(new_freq);
-#endif
 
 	freqs.old = policy->cur;
 	freqs.new = new_freq;
