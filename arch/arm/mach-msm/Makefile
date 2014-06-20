@@ -406,6 +406,12 @@ obj-$(CONFIG_ARCH_RANDOM) += early_random.o
 
 obj-$(CONFIG_INTELLI_PLUG) += intelli_plug.o
 
+obj-$(CONFIG_ARCH_MSM8974) += msm_mpmctr.o
+obj-$(CONFIG_MSM_CPR_REGULATOR) += cpr-regulator.o
+obj-$(CONFIG_CPU_FREQ_MSM) += cpufreq.o
+
+obj-$(CONFIG_WALL_CLK) += wallclk.o
+obj-$(CONFIG_WALL_CLK_SYSFS) += wallclk_sysfs.o
 obj-$(CONFIG_MSM_CPUFREQ_LIMITER) += cpufreq_limit.o
 
 obj-$(CONFIG_TURBO_BOOST) += msm_turbo.o
