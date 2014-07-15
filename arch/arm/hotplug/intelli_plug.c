@@ -65,6 +65,7 @@ static unsigned int persist_count = 0;
 static bool suspended = false;
 
 struct ip_cpu_info {
+	unsigned int sys_max;
 	unsigned int curr_max;
 	unsigned long cpu_nr_running;
 };
@@ -323,8 +324,8 @@ static void __cpuinit intelli_plug_work_fn(struct work_struct *work)
 #ifdef CONFIG_POWERSUSPEND
 static void screen_off_limit(bool on)
 {
-	unsigned int i, ret;
-	struct cpufreq_policy policy;
+	unsigned int i;
+	struct cpufreq_policy *policy;
 	struct ip_cpu_info *l_ip_info;
 
 	/* not active, so exit */
@@ -333,17 +334,18 @@ static void screen_off_limit(bool on)
 
 	for_each_online_cpu(i) {
 		l_ip_info = &per_cpu(ip_info, i);
-		ret = cpufreq_get_policy(&policy, i);
-		if (ret)
-			continue;
+		policy = cpufreq_cpu_get(i);
 
 		if (on) {
 			/* save current instance */
-			l_ip_info->curr_max = policy.max;
-			policy.max = screen_off_max;
+			l_ip_info->curr_max = policy->max;
+			l_ip_info->sys_max = policy->cpuinfo.max_freq;
+			policy->max = screen_off_max;
+			policy->cpuinfo.max_freq = screen_off_max;
 		} else {
 			/* restore */
-			policy.max = l_ip_info->curr_max;
+			policy->cpuinfo.max_freq = l_ip_info->sys_max;
+			policy->max = l_ip_info->curr_max;
 		}
 		cpufreq_update_policy(i);
 	}
@@ -371,15 +373,12 @@ static void intelli_plug_suspend(struct power_suspend *handler)
 
 static void wakeup_boost(void)
 {
-	unsigned int cpu, ret;
-	struct cpufreq_policy policy;
+	unsigned int cpu;
+	struct cpufreq_policy *policy;
 
 	for_each_online_cpu(cpu) {
-		ret = cpufreq_get_policy(&policy, cpu);
-		if (ret)
-			continue;
-
-		policy.cur = policy.max;
+		policy = cpufreq_cpu_get(cpu);
+		policy->cur = policy->max;
 		cpufreq_update_policy(cpu);
 	}
 }
