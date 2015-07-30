@@ -298,16 +298,14 @@ static void avc_xperms_decision_free(struct avc_xperms_decision_node *xpd_node)
 
 static void avc_xperms_free(struct avc_xperms_node *xp_node)
 {
-	struct avc_xperms_decision_node *xpd_node, *tmp;
+	struct avc_operation_decision_node *od_node;
 
 	if (!xp_node)
 		return;
 
-	list_for_each_entry_safe(xpd_node, tmp, &xp_node->xpd_head, xpd_list) {
-		list_del(&xpd_node->xpd_list);
-		avc_xperms_decision_free(xpd_node);
-	}
-	kmem_cache_free(avc_xperms_cachep, xp_node);
+	list_for_each_entry(od_node, &ops_node->od_head, od_list)
+		avc_operation_decision_free(od_node);
+	kmem_cache_free(avc_operation_node_cachep, ops_node);
 }
 
 static void avc_copy_xperms_decision(struct extended_perms_decision *dest,
