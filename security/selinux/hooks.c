@@ -3091,6 +3091,7 @@ static void selinux_file_free_security(struct file *file)
 	file_free_security(file);
 }
 
+<<<<<<< HEAD
 /*
  * Check whether a task has the ioctl permission and cmd
  * operation to an inode.
@@ -3133,6 +3134,8 @@ out:
 	return rc;
 }
 
+=======
+>>>>>>> a064711... Revert "SELinux: per-command whitelisting of ioctls"
 static int selinux_file_ioctl(struct file *file, unsigned int cmd,
 			      unsigned long arg)
 {
@@ -3175,7 +3178,7 @@ static int selinux_file_ioctl(struct file *file, unsigned int cmd,
 	 * to the file's ioctl() function.
 	 */
 	default:
-		error = ioctl_has_perm(cred, file, FILE__IOCTL, (u16) cmd);
+		error = file_has_perm(cred, file, FILE__IOCTL);
 	}
 	return error;
 }
