@@ -608,7 +608,7 @@ u32 res_trk_set_perf_level(u32 req_perf_lvl, u32 *pn_set_perf_lvl,
 			__func__, dev_ctxt);
 	}
 
-	if (dev_ctxt->reqd_perf_lvl + dev_ctxt->curr_perf_lvl == 0) {
+	if ((dev_ctxt->reqd_perf_lvl + dev_ctxt->curr_perf_lvl) == 0) {
 		if (turbo_supported)
 			req_perf_lvl = RESTRK_1080P_TURBO_PERF_LEVEL;
 		else
@@ -641,7 +641,7 @@ u32 res_trk_set_perf_level(u32 req_perf_lvl, u32 *pn_set_perf_lvl,
 		"set_perf_lvl = %u\n", vidc_freq, req_perf_lvl,
 		(u32)*pn_set_perf_lvl);
 #ifdef CONFIG_MSM_BUS_SCALING
-	if (!res_trk_update_bus_perf_level(dev_ctxt, req_perf_lvl) < 0) {
+	if ((!res_trk_update_bus_perf_level(dev_ctxt, req_perf_lvl)) < 0) {
 		VCDRES_MSG_ERROR("%s(): update buf perf level failed\n",
 			__func__);
 		return false;
