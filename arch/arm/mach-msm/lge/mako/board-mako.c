@@ -2146,7 +2146,6 @@ static void __init apq8064_common_init(void)
 	apq8064_init_dsps();
 	platform_device_register(&msm_8960_riva);
 	BUG_ON(msm_pm_boot_init(&msm_pm_boot_pdata));
-	msm_pm_set_tz_retention_flag(1);
 }
 
 static void __init apq8064_allocate_memory_regions(void)
