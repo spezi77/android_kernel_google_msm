@@ -1460,13 +1460,6 @@ static struct msm_rpmrs_level msm_rpmrs_levels[] = {
 		1, 784, 180000, 100,
 	},
 
- 	{
-		MSM_PM_SLEEP_MODE_RETENTION,
-		MSM_RPMRS_LIMITS(ON, ACTIVE, MAX, ACTIVE),
-		true,
-		415, 715, 340827, 475,
-	},
-
 	{
 		MSM_PM_SLEEP_MODE_RETENTION,
 		MSM_RPMRS_LIMITS(ON, ACTIVE, MAX, ACTIVE),
