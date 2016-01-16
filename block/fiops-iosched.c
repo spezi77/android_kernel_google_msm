@@ -653,34 +653,12 @@ static void fiops_init_icq(struct io_cq *icq)
 	fiops_mark_ioc_prio_changed(ioc);
 }
 
-/*
- * sysfs parts below -->
- */
-static ssize_t
-fiops_var_show(unsigned int var, char *page)
-{
-	return sprintf(page, "%d\n", var);
-}
-
-static ssize_t
-fiops_var_store(unsigned int *var, const char *page, size_t count)
-{
-	char *p = (char *) page;
-
-	*var = simple_strtoul(p, &p, 10);
-	return count;
-}
-
 #define SHOW_FUNCTION(__FUNC, __VAR)					\
 static ssize_t __FUNC(struct elevator_queue *e, char *page)		\
 {									\
 	struct fiops_data *fiopsd = e->elevator_data;			\
 	return fiops_var_show(__VAR, (page));				\
 }
-SHOW_FUNCTION(fiops_read_scale_show, fiopsd->read_scale);
-SHOW_FUNCTION(fiops_write_scale_show, fiopsd->write_scale);
-SHOW_FUNCTION(fiops_sync_scale_show, fiopsd->sync_scale);
-SHOW_FUNCTION(fiops_async_scale_show, fiopsd->async_scale);
 #undef SHOW_FUNCTION
 
 #define STORE_FUNCTION(__FUNC, __PTR, MIN, MAX)				\
@@ -696,10 +674,6 @@ static ssize_t __FUNC(struct elevator_queue *e, const char *page, size_t count)	
 	*(__PTR) = __data;						\
 	return ret;							\
 }
-STORE_FUNCTION(fiops_read_scale_store, &fiopsd->read_scale, 1, 100);
-STORE_FUNCTION(fiops_write_scale_store, &fiopsd->write_scale, 1, 100);
-STORE_FUNCTION(fiops_sync_scale_store, &fiopsd->sync_scale, 1, 100);
-STORE_FUNCTION(fiops_async_scale_store, &fiopsd->async_scale, 1, 100);
 #undef STORE_FUNCTION
 
 #define FIOPS_ATTR(name) \
