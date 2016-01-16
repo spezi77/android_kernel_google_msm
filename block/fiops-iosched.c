@@ -705,14 +705,6 @@ STORE_FUNCTION(fiops_async_scale_store, &fiopsd->async_scale, 1, 100);
 #define FIOPS_ATTR(name) \
 	__ATTR(name, S_IRUGO|S_IWUSR, fiops_##name##_show, fiops_##name##_store)
 
-static struct elv_fs_entry fiops_attrs[] = {
-	FIOPS_ATTR(read_scale),
-	FIOPS_ATTR(write_scale),
-	FIOPS_ATTR(sync_scale),
-	FIOPS_ATTR(async_scale),
-	__ATTR_NULL
-};
-
 static struct elevator_type iosched_fiops = {
 	.ops = {
 		.elevator_merge_fn =		fiops_merge,
