@@ -9,13 +9,13 @@ restore='\033[0m'
 clear
 
 # Resources
-THREAD="-j9"
+THREAD="-j6"
 KERNEL="zImage"
-DEFCONFIG="hells_defconfig"
+DEFCONFIG="cyanogen_mako_defconfig"
 
 # Kernel Details
-BASE_HC_VER="hC"
-VER="-b81-L"
+BASE_HC_VER="Mako-MM-spezi77"
+VER="-R04"
 HC_VER="$BASE_HC_VER$VER"
 
 # Vars
@@ -25,10 +25,10 @@ export SUBARCH=arm
 
 # Paths
 KERNEL_DIR=`pwd`
-REPACK_DIR="${HOME}/Android/Kernel/hC-N4-anykernel"
-ZIP_MOVE="${HOME}/Android/Kernel/hC-releases/N4"
-ZIMAGE_DIR="${HOME}/Android/Kernel/hells-Core-N4/arch/arm/boot"
-DB_FOLDER="${HOME}/Dropbox/Kernel-Betas/N4"
+REPACK_DIR="${HOME}/android/Kernel/Anykernel"
+ZIP_MOVE="${HOME}/android/Kernel/Releases/Mako-MM-spezi77"
+ZIMAGE_DIR="${HOME}/android/Kernel/Mako-MM-spezi77/arch/arm/boot"
+DB_FOLDER="${HOME}/Dropbox/Kernel-Betas/Mako-MM-spezi77"
 
 # Functions
 function clean_all {
@@ -58,7 +58,7 @@ function copy_dropbox {
 DATE_START=$(date +"%s")
 
 echo -e "${green}"
-echo "hC Kernel Creation Script:"
+echo "Mako-MM-spezi77 Kernel Creation Script:"
 echo
 
 echo "---------------"
@@ -69,7 +69,7 @@ echo -e "${red}"; echo -e "${blink_red}"; echo "$HC_VER"; echo -e "${restore}";
 
 echo -e "${green}"
 echo "-----------------"
-echo "Making hC Kernel:"
+echo "Making Kernel:"
 echo "-----------------"
 echo -e "${restore}"
 
