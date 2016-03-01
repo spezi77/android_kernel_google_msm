@@ -25,7 +25,7 @@ export SUBARCH=arm
 
 # Paths
 KERNEL_DIR=`pwd`
-REPACK_DIR="${HOME}/android/Kernel/Anykernel"
+REPACK_DIR="${HOME}/android/Kernel/AnyKernel"
 ZIP_MOVE="${HOME}/android/Kernel/Releases/Mako-MM-spezi77"
 ZIMAGE_DIR="${HOME}/android/Kernel/Mako-MM-spezi77/arch/arm/boot"
 DB_FOLDER="${HOME}/Dropbox/Kernel-Betas/Mako-MM-spezi77"
@@ -44,7 +44,7 @@ function make_kernel {
 
 function make_zip {
 		cd $REPACK_DIR
-		zip -9 -r `echo $HC_VER`.zip .
+		zip -9 -r --exclude='*.git*' `echo $HC_VER`.zip .
 		mv  `echo $HC_VER`.zip $ZIP_MOVE
 		cd $KERNEL_DIR
 }
