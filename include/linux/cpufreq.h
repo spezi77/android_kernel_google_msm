@@ -413,7 +413,22 @@ extern struct cpufreq_governor cpufreq_gov_yankdemand;
 #define CPUFREQ_DEFAULT_GOVERNOR	(&cpufreq_gov_yankdemand)
 #elif defined(CONFIG_CPU_FREQ_DEFAULT_GOV_HELLSACTIVE)
 extern struct cpufreq_governor cpufreq_gov_hellsactive;
-#define CPUFREQ_DEFAULT_GOVERNOR        (&cpufreq_gov_hellsactive)
+#define CPUFREQ_DEFAULT_GOVERNOR	(&cpufreq_gov_hellsactive)
+#elif defined(CONFIG_CPU_FREQ_DEFAULT_GOV_SMARTMAX_EPS)
+extern struct cpufreq_governor cpufreq_gov_smartmax_eps;
+#define CPUFREQ_DEFAULT_GOVERNOR	(&cpufreq_gov_smartmax_eps)
+#elif defined(CONFIG_CPU_FREQ_DEFAULT_GOV_SMARTMAX)
+extern struct cpufreq_governor cpufreq_gov_smartmax;
+#define CPUFREQ_DEFAULT_GOVERNOR	(&cpufreq_gov_smartmax)
+#elif defined(CONFIG_CPU_FREQ_DEFAULT_GOV_PEGASUSQ)
+extern struct cpufreq_governor cpufreq_gov_pegasusq;
+#define CPUFREQ_DEFAULT_GOVERNOR	(&cpufreq_gov_pegasusq)
+#elif defined(CONFIG_CPU_FREQ_DEFAULT_GOV_LIONHEART)
+extern struct cpufreq_governor cpufreq_gov_lionheart;
+#define CPUFREQ_DEFAULT_GOVERNOR	(&cpufreq_gov_lionheart)
+#elif defined(CONFIG_CPU_FREQ_DEFAULT_GOV_BLU_ACTIVE)
+extern struct cpufreq_governor cpufreq_gov_blu_active;
+#define CPUFREQ_DEFAULT_GOVERNOR	(&cpufreq_gov_blu_active)
 #endif
 
 
