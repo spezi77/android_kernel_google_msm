@@ -147,29 +147,6 @@ struct dsiphy_pll_divider_config {
 
 extern struct dsiphy_pll_divider_config pll_divider_config;
 
-struct dsi_clk_mnd_table {
-	uint8 lanes;
-	uint8 bpp;
-	uint8 dsiclk_div;
-	uint8 dsiclk_m;
-	uint8 dsiclk_n;
-	uint8 dsiclk_d;
-	uint8 pclk_m;
-	uint8 pclk_n;
-	uint8 pclk_d;
-};
-
-static const struct dsi_clk_mnd_table mnd_table[] = {
-	{ 1, 2, 8, 1, 1, 0, 1,  2, 1},
-	{ 1, 3, 8, 1, 1, 0, 1,  3, 2},
-	{ 2, 2, 4, 1, 1, 0, 1,  2, 1},
-	{ 2, 3, 4, 1, 1, 0, 1,  3, 2},
-	{ 3, 2, 1, 3, 8, 4, 3, 16, 8},
-	{ 3, 3, 1, 3, 8, 4, 1,  8, 4},
-	{ 4, 2, 2, 1, 1, 0, 1,  2, 1},
-	{ 4, 3, 2, 1, 1, 0, 1,  3, 2},
-};
-
 struct dsi_clk_desc {
 	uint32 src;
 	uint32 m;

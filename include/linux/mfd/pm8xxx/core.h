@@ -85,17 +85,6 @@ enum pm8xxx_version {
 #define PM8XXX_RESTART_GEN_PURPOSE	7
 #define PM8XXX_RESTART_REASON_MASK	0x07
 
-static const char * const pm8xxx_restart_reason_str[] = {
-	[0] = "Unknown",
-	[1] = "Triggered from CBL (external charger)",
-	[2] = "Triggered from KPD (power key press)",
-	[3] = "Triggered from CHG (usb charger insertion)",
-	[4] = "Triggered from SMPL (sudden momentary power loss)",
-	[5] = "Triggered from RTC (real time clock)",
-	[6] = "Triggered by Hard Reset",
-	[7] = "Triggered by General Purpose Trigger",
-};
-
 struct pm8xxx_drvdata {
 	int			(*pmic_readb) (const struct device *dev,
 						u16 addr, u8 *val);
