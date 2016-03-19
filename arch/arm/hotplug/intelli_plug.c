@@ -26,10 +26,6 @@
 #include <linux/powersuspend.h>
 #endif
 
-#ifdef CONFIG_HAS_EARLYSUSPEND
-#include <linux/earlysuspend.h>
-#endif
-
 //#define DEBUG_INTELLI_PLUG
 #undef DEBUG_INTELLI_PLUG
 
@@ -82,11 +78,9 @@ module_param(screen_off_max, uint, 0644);
 #define CAPACITY_RESERVE	50
 
 #if defined(CONFIG_ARCH_MSM8960) || defined(CONFIG_ARCH_APQ8064) || \
-defined(CONFIG_ARCH_MSM8974)
+defined(CONFIG_ARCH_MSM8974) || defined(CONFIG_ARCH_MSM8226) || \
+defined(CONFIG_ARCH_MSM8926)
 #define THREAD_CAPACITY	(339 - CAPACITY_RESERVE)
-#elif defined(CONFIG_ARCH_MSM8226) || defined (CONFIG_ARCH_MSM8926) || \
-defined (CONFIG_ARCH_MSM8610) || defined (CONFIG_ARCH_MSM8228)
-#define THREAD_CAPACITY (190 - CAPACITY_RESERVE)
 #else
 #define THREAD_CAPACITY	(250 - CAPACITY_RESERVE)
 #endif
@@ -268,12 +262,10 @@ static void __cpuinit intelli_plug_work_fn(struct work_struct *work)
 		nr_cpus = num_online_cpus();
 
 		if (!suspended) {
-
-			if (persist_count > 0)
-				persist_count--;
-
 			switch (cpu_count) {
 			case 1:
+				if (persist_count > 0)
+					persist_count--;
 				if (persist_count == 0) {
 					//take down everyone
 					unplug_cpu(0);
@@ -283,8 +275,7 @@ static void __cpuinit intelli_plug_work_fn(struct work_struct *work)
 #endif
 				break;
 			case 2:
-				if (persist_count == 0)
-					persist_count = DUAL_PERSISTENCE;
+				persist_count = DUAL_PERSISTENCE;
 				if (nr_cpus < 2) {
 					for (i = 1; i < cpu_count; i++)
 						cpu_up(i);
@@ -296,8 +287,7 @@ static void __cpuinit intelli_plug_work_fn(struct work_struct *work)
 #endif
 				break;
 			case 3:
-				if (persist_count == 0)
-					persist_count = TRI_PERSISTENCE;
+				persist_count = TRI_PERSISTENCE;
 				if (nr_cpus < 3) {
 					for (i = 1; i < cpu_count; i++)
 						cpu_up(i);
@@ -309,8 +299,7 @@ static void __cpuinit intelli_plug_work_fn(struct work_struct *work)
 #endif
 				break;
 			case 4:
-				if (persist_count == 0)
-					persist_count = QUAD_PERSISTENCE;
+				persist_count = QUAD_PERSISTENCE;
 				if (nr_cpus < 4)
 					for (i = 1; i < cpu_count; i++)
 						cpu_up(i);
@@ -332,7 +321,7 @@ static void __cpuinit intelli_plug_work_fn(struct work_struct *work)
 		msecs_to_jiffies(sampling_time));
 }
 
-#if defined(CONFIG_POWERSUSPEND) || defined(CONFIG_HAS_EARLYSUSPEND)
+#ifdef CONFIG_POWERSUSPEND
 static void screen_off_limit(bool on)
 {
 	unsigned int cpu;
@@ -372,11 +361,7 @@ static void screen_off_limit(bool on)
 	}
 }
 
-#ifdef CONFIG_POWERSUSPEND
 static void intelli_plug_suspend(struct power_suspend *handler)
-#else
-static void intelli_plug_suspend(struct early_suspend *handler)
-#endif
 {
 	if (intelli_plug_active) {
 		int cpu;
@@ -410,11 +395,7 @@ static void wakeup_boost(void)
 	}
 }
 
-#ifdef CONFIG_POWERSUSPEND
 static void __cpuinit intelli_plug_resume(struct power_suspend *handler)
-#else
-static void __cpuinit intelli_plug_resume(struct early_suspend *handler)
-#endif
 {
 
 	if (intelli_plug_active) {
@@ -438,22 +419,12 @@ static void __cpuinit intelli_plug_resume(struct early_suspend *handler)
 	queue_delayed_work_on(0, intelliplug_wq, &intelli_plug_work,
 		msecs_to_jiffies(10));
 }
-#endif
 
-#ifdef CONFIG_POWERSUSPEND
 static struct power_suspend intelli_plug_power_suspend_driver = {
 	.suspend = intelli_plug_suspend,
 	.resume = intelli_plug_resume,
 };
 #endif  /* CONFIG_POWERSUSPEND */
-
-#ifdef CONFIG_HAS_EARLYSUSPEND
-static struct early_suspend intelli_plug_early_suspend_driver = {
-        .level = EARLY_SUSPEND_LEVEL_DISABLE_FB + 10,
-        .suspend = intelli_plug_suspend,
-        .resume = intelli_plug_resume,
-};
-#endif	/* CONFIG_HAS_EARLYSUSPEND */
 
 static void intelli_plug_input_event(struct input_handle *handle,
 		unsigned int type, unsigned int code, int value)
@@ -562,9 +533,7 @@ int __init intelli_plug_init(void)
 #ifdef CONFIG_POWERSUSPEND
 	register_power_suspend(&intelli_plug_power_suspend_driver);
 #endif
-#ifdef CONFIG_HAS_EARLYSUSPEND
-	register_early_suspend(&intelli_plug_early_suspend_driver);
-#endif
+
 	intelliplug_wq = alloc_workqueue("intelliplug",
 				WQ_HIGHPRI | WQ_UNBOUND, 1);
 	intelliplug_boost_wq = alloc_workqueue("iplug_boost",
