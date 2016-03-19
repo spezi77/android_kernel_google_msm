@@ -31,6 +31,7 @@
 #include <linux/kthread.h>
 #include <linux/mutex.h>
 #include <linux/earlysuspend.h>
+#include <linux/sched/rt.h>
 
 #ifdef CONFIG_TRIPNDROID_FRAMEWORK
 #include <linux/td_framework.h>

@@ -36,7 +36,7 @@
 #include <linux/kernel.h>
 #include <linux/module.h>
 #include <linux/init.h>
-#include <linux/slab.h>
+#include <linux/sched/rt.h>
 
 static atomic_t active_count = ATOMIC_INIT(0);
 

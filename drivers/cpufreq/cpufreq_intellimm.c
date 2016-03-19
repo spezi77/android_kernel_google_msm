@@ -28,6 +28,7 @@
 #include <linux/input.h>
 #include <linux/workqueue.h>
 #include <linux/slab.h>
+#include <linux/sched/rt.h>
 
 #define DEF_SAMPLING_RATE			(50000)
 #define DEF_FREQUENCY_DOWN_DIFFERENTIAL		(10)

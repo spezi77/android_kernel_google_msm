@@ -36,7 +36,7 @@
 
 #include <asm/cputime.h>
 #include <linux/suspend.h>
-
+#include <linux/sched/rt.h>
 
 #define LULZACTIVE_VERSION	(2)
 #define LULZACTIVE_AUTHOR	"tegrak"

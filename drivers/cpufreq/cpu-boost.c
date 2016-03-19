@@ -48,8 +48,6 @@ static struct workqueue_struct *cpu_boost_wq;
 
 static struct work_struct input_boost_work;
 
-static struct notifier_block notif;
-
 static unsigned int boost_ms = 1000;
 module_param(boost_ms, uint, 0644);
 
@@ -492,7 +490,7 @@ static struct notifier_block __refdata cpu_nblk = {
         .notifier_call = cpuboost_cpu_callback,
 };
 
-static void __wakeup_boost(void)
+/*static void __wakeup_boost(void)
 {
 	if (!wakeup_boost || !input_boost_enabled ||
 	     work_pending(&input_boost_work))
@@ -500,7 +498,7 @@ static void __wakeup_boost(void)
 	pr_debug("Wakeup boost for display on event.\n");
 	queue_work(cpu_boost_wq, &input_boost_work);
 	last_input_time = ktime_to_us(ktime_get());
-}
+}*/
 
 #ifdef CONFIG_STATE_NOTIFIER
 static int state_notifier_callback(struct notifier_block *this,

@@ -38,6 +38,7 @@
 #include <linux/kthread.h>
 #include <linux/slab.h>
 #include <linux/kernel_stat.h>
+#include <linux/sched/rt.h>
 
 #ifdef CONFIG_CPU_FREQ_GOV_SMARTMAX_TEGRA
 extern int tegra_input_boost (struct cpufreq_policy *policy,
