@@ -15,7 +15,7 @@ DEFCONFIG="cyanogen_mako_defconfig"
 
 # Kernel Details
 BASE_HC_VER="Mako-MM-spezi77"
-VER="-R04"
+VER="-R06"
 HC_VER="$BASE_HC_VER$VER"
 
 # Vars
