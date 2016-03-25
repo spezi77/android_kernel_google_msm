@@ -36,6 +36,9 @@ modules.builtin
 # Ignore my build script
 build-kernel
 
+# Compressed
+arch/arm/boot/compressed/bswapsdi2.S
+
 #
 # Top-level generic files
 #
